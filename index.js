@@ -9,7 +9,6 @@ const con = mysql.createConnection({
    password: config.password,
    database: config.database
 });
-let default_channel = ''
 
 const five_stars = ['Jean', 'Diluc', 'Venti', 'Klee', 'Mona', 'Xiao', 'Qiqi', 'Keqing']
 const four_stars = ['Amber', 'Lisa', 'Kaeya', 'Barbara', 'Razor', 'Bennett', 'Noelle', 'Fischl', 'Sucrose', 'Beidou', 'Ningguang', 'Xiangling', 'Xingqiu', 'Chongyun']
@@ -54,7 +53,7 @@ client.on('message', function(message) {
                con.query("SELECT * FROM users WHERE user_id = ?", [message.author.id], function(err, res) {
                   if(err) console.log(err)
                   if(res != '') {
-                     let points  = parseInt(res[0].points) + 5;
+                     let points  = parseInt(res[0].points) + 10;
                      con.query("UPDATE users SET points = ? WHERE user_id = ?", [points, message.author.id], function(err, upd) {
                         if(err) console.log(err)
                         if(upd) console.log('add 5 points')
@@ -93,7 +92,6 @@ client.on('message', function(message) {
                   if(err) console.log(err)
                   if(res) {
                      message.channel.send(`Create to channel ${args[1]}`)
-                     default_channel = args[1]
                   }
                })
             }
@@ -137,7 +135,7 @@ client.on('message', function(message) {
       con.query("SELECT * FROM users WHERE user_id = ?", [message.author.id], function(err, res) {
          if(err) console.log(err)
          if(res != '') {
-            if(res[0].points >= 100) {
+            if(res[0].points >= 50) {
                const getNumber = roll()
                let msg = ''
                let files = ''
@@ -196,14 +194,20 @@ client.on('message', function(message) {
    }
 
    if(command == 'help') {
-      var msg = "Welcome to Gacha Bot!\r\n"
-      msg += "My prefix is $\r\n"
-      msg += "Command list :\r\n"
-      msg += "$register : Register your account\r\n"
-      msg += "$points : Check your points\r\n"
-      msg += "$roll : Try your luck. Roll 1 time\r\n"
-      msg += `Note: You need at least 100 Points to use $roll command. To earn points, you can chat on ${default_channel}`
-      message.channel.send(msg)
+      con.query("SELECT * FROM setting WHERE idx = ?", ['channel'], function(err, res) {
+         if(err) console.log(err)
+         if(res) {
+            var msg = "Welcome to Gacha Bot!\r\n"
+            msg += "My prefix is $\r\n"
+            msg += "Command list :\r\n"
+            msg += "$register : Register your account\r\n"
+            msg += "$points : Check your points\r\n"
+            msg += "$roll : Try your luck. Roll 1 time\r\n"
+            msg += `Note: You need at least 100 Points to use $roll command. To earn points, you can chat on <#${res[0].value}> (Alert: DON'T SPAM!!!)`
+            message.channel.send(msg)
+         }
+      })
+      
 
    }
 })
