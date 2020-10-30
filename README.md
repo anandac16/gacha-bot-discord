@@ -12,17 +12,25 @@ $ mkdir gacha-bot
 ```bash
 $ cd gacha-bot
 ```
+
+```bash
+$ cp config.json.test config.json
+```
+Set to your own config like BOT Token, MySQL host, username, password, and database name
 ```bash
 $ nano config.json
 ```
-```bash
+```npm
 $ npm init
 ```
-```bash
+```npm
 $ npm install discord.js
 ```
-```bash
-$ node index.js
+
+## Usage
+
+```npm
+node index.js
 ```
 
 ## Contributing
