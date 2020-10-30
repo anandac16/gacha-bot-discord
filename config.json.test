@@ -1,3 +1,7 @@
 {
-    "BOT_TOKEN": "YOUR BOT TOKEN"
+   "BOT_TOKEN": "YOUR_BOT_TOKEN",
+   "host": "",
+   "user": "",
+   "password": "",  
+   "database": "",
 }
